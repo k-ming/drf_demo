@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'flower'
 ]
 
 REST_FRAMEWORK = {
@@ -85,9 +86,25 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+    },
+    'flower':{
+        'ENGINE':'django.db.backends.mysql',
+        'NAME':'flower',
+        'USER':'root',
+        'PASSWORD':'123456',
+        'HOST':'192.168.126.128',
+        'PORT':'3306',
     }
 }
 
+# 配置多数据库
+#Database router
+DATABASE_ROUTERS = ['drf_demo.db_router.DatabaseAppsRouter']
+
+# 数据库名与app的映射 app:database
+DATABASE_APPS_MAPPING = {
+    'flower':'flower',
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
