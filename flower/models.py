@@ -17,8 +17,10 @@ class Flower(models.Model):
     location = models.TextField(blank=True, null=True)
     habit = models.TextField(blank=True, null=True)
     value = models.TextField(blank=True, null=True)
+    create_time = models.DateTimeField(blank=True, null=True)
+    update_time = models.DateTimeField(blank=True, null=True)
+    valid = models.IntegerField(blank=True, null=True)
 
     class Meta:
-        app_label = 'flower'
         managed = False
         db_table = 'flower'
