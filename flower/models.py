@@ -10,13 +10,13 @@ from django.db import models
 
 class Flower(models.Model):
     no = models.AutoField(primary_key=True)
-    name = models.TextField()
+    name = models.CharField(max_length=20, db_collation='latin1_swedish_ci')
+    product_name = models.CharField(max_length=20, db_collation='latin1_swedish_ci', blank=True, null=True)
     height = models.IntegerField(blank=True, null=True)
-    product_name = models.TextField(blank=True, null=True)
     bust = models.IntegerField(blank=True, null=True)
-    location = models.TextField(blank=True, null=True)
-    habit = models.TextField(blank=True, null=True)
-    value = models.TextField(blank=True, null=True)
+    location = models.CharField(max_length=255, db_collation='latin1_swedish_ci', blank=True, null=True)
+    habit = models.CharField(max_length=255, db_collation='latin1_swedish_ci', blank=True, null=True)
+    value = models.CharField(max_length=255, db_collation='latin1_swedish_ci', blank=True, null=True)
     create_time = models.DateTimeField(blank=True, null=True)
     update_time = models.DateTimeField(blank=True, null=True)
     valid = models.IntegerField(blank=True, null=True)

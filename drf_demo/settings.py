@@ -91,9 +91,11 @@ DATABASES = {
         'ENGINE':'django.db.backends.mysql',
         'NAME':'flower',
         'USER':'root',
-        'PASSWORD':'123456',
-        'HOST':'192.168.126.128',
+        'PASSWORD':'1234',
+        'HOST':'148.100.78.77',
         'PORT':'3306',
+        'OPTIONS':{'charset':'utf8mb4'},
+        'CONN_MAX_AGE':180,
     }
 }
 
