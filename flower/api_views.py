@@ -11,7 +11,8 @@ from .serializers import FlowerSerializer
 class FlowerListApiView(APIView):
 	"""列表操作"""
 	def get(self, request, format=None):
-		flower = Flower.objects.filter()
+		# 过滤出valid=1的记录
+		flower = Flower.objects.filter(valid=1)
 		serializer = FlowerSerializer(flower, many=True)
 		return Response(serializer.data)
 
