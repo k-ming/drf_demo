@@ -10,15 +10,15 @@ from .models import Flower
 
 class FlowerSerializer(serializers.Serializer):
 	"""flower 的序列化器"""
-	no = serializers.IntegerField(label='no', read_only=True)
+	no = serializers.IntegerField(label='编号', read_only=True)
 	name = serializers.CharField(label='学名', max_length=20)
 	height = serializers.IntegerField(label='高度', required=False)
 	product_name = serializers.CharField(label='商品名', required=False)
 	bust = serializers.IntegerField(label='胸径', required=False)
 	location = serializers.CharField(label='分布', required=False)
 	habit = serializers.CharField(label='习性', required=False)
-	create_time = serializers.DateTimeField(label='创建时间', required=False)
-	update_time = serializers.DateTimeField(label='更新时间', required=False)
+	create_time = serializers.DateTimeField(label='创建日期时间', required=False)
+	update_time = serializers.DateTimeField(label='更新日期时间', required=False)
 	valid = serializers.IntegerField(label='是否有效', required=False)
 	value = serializers.CharField(label='价值', required=False)	
 
