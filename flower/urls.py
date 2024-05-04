@@ -8,6 +8,7 @@
 from django.urls import path
 from .api_views import FlowerListApiView, FlowerListDetailApiView
 from .import base_views
+from rest_framework.urlpatterns import format_suffix_patterns
 
 urlpatterns = [
     path('list/', FlowerListApiView.as_view()),
@@ -15,3 +16,6 @@ urlpatterns = [
     path('base_list/', base_views.flower_list),
     path('base_list/<int:pk>', base_views.flower_detail)
 ]
+
+
+urlpatterns = format_suffix_patterns(urlpatterns)
