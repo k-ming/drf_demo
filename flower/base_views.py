@@ -5,58 +5,51 @@
 # @Link    : ${link}
 # @Version : $Id$ 
 
-from django.http import HttpResponse
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework.renderers import JSONRenderer
-from rest_framework.parsers import JSONParser
+
 from .models import Flower
 from .model_serializers import FlowerModelSerializer
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
-class JSONResponse(HttpResponse):
-	"""parse body data"""
-	def __init__(self, data, **kwargs):
-		content = JSONRenderer().render(data)
-		kwargs['content_type'] = 'application/json'
-		super(JSONResponse, self).__init__(content, **kwargs)
 
-@csrf_exempt
-def flower_list(request):
+
+@api_view(['GET', 'POST'])
+def flower_list(request, format=None):
 	""" 列表操作 """
 	if request.method == 'GET':
 		flower = Flower.objects.all()
 		serializer = FlowerModelSerializer(flower, many=True)
-		return JSONResponse(serializer.data)
+		return Response(serializer.data, status=status.HTTP_200_OK)
 
 	elif request.method == 'POST':
-		data = JSONParser().parse(request)
-		serializer = FlowerModelSerializer(data = data)
+		serializer = FlowerModelSerializer(data = request.data)
 		if serializer.is_valid():
 			serializer.save()
-			return JSONResponse(serializer.data, status=201)
-		return JSONResponse(serializer.errors, status=400)
+			return Response(serializer.data, status=status.HTTP_200_OK)
+		return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)
 
-@csrf_exempt
-def flower_detail(request, pk):
+@api_view(['GET', 'PUT', 'DELETE'])
+def flower_detail(request, pk, format=None):
 	""" 详情操作 """
 	try:
 		flower = Flower.objects.get(pk=pk)
 	except Flower.DoesNotExist:
-		return HttpResponse(status=404)
+		return Response(status=status.HTTP_404_NOT_FOUND)
 
 	if request.method == 'GET':
 		serializer = FlowerModelSerializer(flower)
-		return JSONResponse(serializer.data)
+		return Response(serializer.data, status=status.HTTP_200_OK)
 
 	elif request.method == 'PUT':
-		data = JSONParser().parse(request)
-		serializer = FlowerModelSerializer(instance=flower, data=data)
+		serializer = FlowerModelSerializer(instance=flower, data=request.data)
 		if serializer.is_valid():
 			serializer.save()
-			return JSONResponse(serializer.data)
-		return JSONResponse(serializer.errors, status=400)
+			return Response(serializer.data, status=status.HTTP_200_OK)
+		return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)
 
 	elif request.method == 'DELETE':
 		# flower.delete()
 		flower.valid = 0 #这种写法有问题，数据无法更新
 		flower.save()
-		return HttpResponse(status=204)
+		return Response(status=status.HTTP_204_NO_CONTENT)
