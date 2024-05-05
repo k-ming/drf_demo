@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_REQUEST, HTTP_204_NO_CONTENT
@@ -6,7 +5,10 @@ from rest_framework import status
 from .models import Flower
 from .serializers import FlowerSerializer
 
-# Create your views here.
+"""
+使用基于类的试图APIView, 
+使用原始的seriallizer序列化，需要自己实现 create update 方法
+"""
 
 class FlowerListApiView(APIView):
 	"""列表操作"""

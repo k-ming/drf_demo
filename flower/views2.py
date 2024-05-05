@@ -12,7 +12,10 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-
+"""
+使用基于函数的试图 api_view 装饰器，
+使用 modelSerializer 来序列化
+"""
 
 @api_view(['GET', 'POST'])
 def flower_list(request, format=None):
@@ -50,6 +53,6 @@ def flower_detail(request, pk, format=None):
 
 	elif request.method == 'DELETE':
 		# flower.delete()
-		flower.valid = 0 #这种写法有问题，数据无法更新
+		flower.valid = 0 # 逻辑删除
 		flower.save()
 		return Response(status=status.HTTP_204_NO_CONTENT)
