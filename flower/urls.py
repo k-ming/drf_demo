@@ -9,7 +9,9 @@ from django.urls import path
 from .views1 import FlowerListApiView, FlowerListDetailApiView
 from .import views2
 from rest_framework.urlpatterns import format_suffix_patterns
-from .views3 import FlowerMixinsList, FlowerMixinsDetail, FlowerMixedList, FlowerMixedDetail
+from .views3 import FlowerMixinsList, FlowerMixinsDetail,\
+					 FlowerMixedList, FlowerMixedDetail,\
+					 UserList, UserDetail
 
 urlpatterns = [
 	path('list/', FlowerListApiView.as_view()),
@@ -19,7 +21,9 @@ urlpatterns = [
 	path('mixins_list/', FlowerMixinsList.as_view()),
 	path('mixins_list/<int:pk>', FlowerMixinsDetail.as_view()),
 	path('mixed_list/', FlowerMixedList.as_view()),
-	path('mixed_list/<int:pk>', FlowerMixedDetail.as_view())
+	path('mixed_list/<int:pk>', FlowerMixedDetail.as_view()),
+	path('users/', UserList.as_view()),
+	path('users/<int:pk>', UserDetail.as_view())
 ]
 
 

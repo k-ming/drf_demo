@@ -20,3 +20,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('flower/', include("flower.urls")),
 ]
+
+urlpatterns += [
+	path('api_auth/', include('rest_framework.urls'))
+]
