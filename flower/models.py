@@ -6,6 +6,10 @@
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
+from pygments.lexers import get_lexer_by_name
+from pygments.formatters.html import HtmlFormatter
+from pygments import highlight
+from django.contrib.auth.models import User
 
 
 class Flower(models.Model):
@@ -21,6 +25,27 @@ class Flower(models.Model):
     update_time = models.DateTimeField(blank=True, null=True)
     valid = models.IntegerField(blank=True, null=True)
 
+    # 新增2个字段到flower模型中
+    # owner = models.ForeignKey('auth.User', related_name='flower',on_delete=models.CASCADE, null=True, default=None)
+    owner = models.ForeignKey(User, related_name='flower',on_delete=models.CASCADE)
+    highlighted = models.TextField()
+
     class Meta:
-        managed = False
+        managed = True
         db_table = 'flower'
+
+
+    # 新增save方法
+    def save(self, *args, **kwargs):
+        """
+        使用`pygments`库创建一个高亮显示的HTML表示代码段。
+        """
+        lexer = get_lexer_by_name(self.language)
+        linenos = self.linenos and 'table' or False
+        options = self.title and {'title':self.title} or {}
+        formatter = HtmlFormatter(style=self.style, linenos=linenos\
+                                ,full=True, **options)
+        self.highlighted = highlight(self.code, lexer, formatter)
+        super(Flower, self).save(*args, **kwargs)
+
+

@@ -7,8 +7,11 @@
 
 from rest_framework import generics
 from rest_framework import mixins
-from .model_serializers import FlowerModelSerializer
+from .model_serializers import FlowerModelSerializer, UserModelSerializer
 from .models import Flower
+from django.contrib.auth.models import User
+from rest_framework import permissions
+from .permissions import IsOwnerOrReadOnly
 
 class FlowerMixinsList(mixins.ListModelMixin\
 						,mixins.CreateModelMixin\
@@ -28,6 +31,13 @@ class FlowerMixinsList(mixins.ListModelMixin\
 	def post(self, request, *args, **kwargs): # 调用父类ListModelMixin 的create方法，新增记录
 		return self.create(request, *args, **kwargs)
 
+	"""
+	获取请求request中的user,并存入model,实现关联
+	"""
+	def perform_create(self, serializer):
+		serializer.save(owner=self.request.user)
+		
+	permission_class = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)  # 添加视图所需的权限
 
 class FlowerMixinsDetail(mixins.RetrieveModelMixin\
 						,mixins.UpdateModelMixin\
@@ -51,6 +61,7 @@ class FlowerMixinsDetail(mixins.RetrieveModelMixin\
 
 	def delete(self, request, *args, **kwargs):
 		return self.destroy(request, *args, **kwargs)
+	permission_class = (permissions.IsAuthenticatedOrReadOnly,)  # 添加视图所需的权限
 
 class FlowerMixedList(generics.ListCreateAPIView):
 	"""
@@ -69,4 +80,19 @@ class FlowerMixedDetail(generics.RetrieveUpdateDestroyAPIView):
 	queryset = Flower.objects.all().filter(valid=1)
 	# 指定序列化器
 	serializer_class = FlowerModelSerializer	
+		
+class UserList(generics.ListAPIView):
+	"""
+	创建管理员列表视图，使用通用试图类ListAPIView实现只读
+	"""
+	queryset = User.objects.all()
+	serializer_class = UserModelSerializer
+
+		
+class UserDetail(generics.RetrieveAPIView):
+	"""
+	创建管理员详情视图，使用通用试图类RetrieveAPIView实现只读
+	"""
+	queryset = User.objects.all()
+	serializer_class = UserModelSerializer	
 		
