@@ -10,11 +10,10 @@ from  .models import Flower
 from django.contrib.auth.models import User
 
 class FlowerModelSerializer(serializers.ModelSerializer):
-	owner = serializers.ReadOnlyField(source='owner.username') # 更新关联
 	class Meta:
 		model = Flower
+		owner = serializers.ReadOnlyField(source='owner.username') # 更新关联
 		fields = '__all__'
-		extra_fields = ('owner')
 			
 class UserModelSerializer(serializers.ModelSerializer):
 	"""
@@ -25,6 +24,3 @@ class UserModelSerializer(serializers.ModelSerializer):
 		model = User
 		# flower 在用户模型中是一个反向关联关系。在使用 ModelSerializer 类时它默认不会被包含，所以我们需要为它添加一个显式字段。
 		fields =  ('id', 'username', 'flower') 
-
-		
-			

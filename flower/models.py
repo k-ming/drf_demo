@@ -9,6 +9,7 @@ from django.db import models
 from pygments.lexers import get_lexer_by_name
 from pygments.formatters.html import HtmlFormatter
 from pygments import highlight
+from django.contrib.auth.models import User
 
 
 class Flower(models.Model):
@@ -24,13 +25,15 @@ class Flower(models.Model):
     update_time = models.DateTimeField(blank=True, null=True)
     valid = models.IntegerField(blank=True, null=True)
 
+    # 新增2个字段到flower模型中
+    # owner = models.ForeignKey('auth.User', related_name='flower',on_delete=models.CASCADE, null=True, default=None)
+    owner = models.ForeignKey(User, related_name='flower',on_delete=models.CASCADE)
+    highlighted = models.TextField()
+
     class Meta:
-        managed = False
+        managed = True
         db_table = 'flower'
 
-    # 新增2个字段到flower模型中
-    owner = models.ForeignKey('auth.User', related_name='flower',on_delete=models.CASCADE)
-    highlighted = models.TextField()
 
     # 新增save方法
     def save(self, *args, **kwargs):

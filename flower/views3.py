@@ -11,6 +11,7 @@ from .model_serializers import FlowerModelSerializer, UserModelSerializer
 from .models import Flower
 from django.contrib.auth.models import User
 from rest_framework import permissions
+from .permissions import IsOwnerOrReadOnly
 
 class FlowerMixinsList(mixins.ListModelMixin\
 						,mixins.CreateModelMixin\
@@ -36,7 +37,7 @@ class FlowerMixinsList(mixins.ListModelMixin\
 	def perform_create(self, serializer):
 		serializer.save(owner=self.request.user)
 		
-	permission_class = (permissions.IsAuthenticatedOrReadOnly,)  # 添加视图所需的权限
+	permission_class = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)  # 添加视图所需的权限
 
 class FlowerMixinsDetail(mixins.RetrieveModelMixin\
 						,mixins.UpdateModelMixin\
